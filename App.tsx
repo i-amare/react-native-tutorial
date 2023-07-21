@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
+import { StyleSheet, Text, View, FlatList, TextInput } from "react-native";
 import { useState } from "react";
 
 export default function App() {
@@ -11,10 +11,13 @@ export default function App() {
 	]);
 
 	function handleTextSubmit(val: string) {
-		setList([...list, { value: val, key: `${val}-${list.length}` }]);
+		setList([
+			...list,
+			{ value: val, key: `${val}-${Math.round(Math.random() * 100)}` },
+		]);
 	}
 
-	function handleListItemDeletion(deletionKey) {
+	function handleListItemDeletion(deletionKey: string) {
 		const res = new Array<{ key: string; value: string }>();
 		list.forEach((item) => {
 			if (item.key != deletionKey) res.push(item);
@@ -27,23 +30,22 @@ export default function App() {
 			<Text style={styles.header}>Enter an Item</Text>
 			<TextInput
 				style={styles.input}
-        inputMode="text"
+				inputMode='text'
 				placeholder='Input Value'
 				onSubmitEditing={(e) => handleTextSubmit(e.nativeEvent.text)}
 			/>
-			<ScrollView style={styles.scrollView}>
-				{list.map(({ key, value }) => {
-					return (
-						<View
-							onTouchStart={() => handleListItemDeletion(key)}
-							key={key}
-							style={styles.listItemContainer}
-						>
-							<Text style={styles.listItem}>{value}</Text>
-						</View>
-					);
-				})}
-			</ScrollView>
+			<FlatList
+				style={styles.flatList}
+				data={list}
+				renderItem={({ item }) => (
+					<View
+						onTouchStart={() => handleListItemDeletion(item.key)}
+						style={styles.listItemContainer}
+					>
+						<Text style={styles.listItem}>{item.value}</Text>
+					</View>
+				)}
+			/>
 			<StatusBar style='auto'></StatusBar>
 		</View>
 	);
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
 		color: "black",
 		backgroundColor: "white",
 	},
-	scrollView: {
+	flatList: {
 		width: "100%",
 	},
 	listItemContainer: {
