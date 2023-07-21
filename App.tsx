@@ -5,11 +5,17 @@ import { useState } from "react";
 export default function App() {
 	const [text, setText] = useState("Test Text");
 
+  function handleButtonCLick() {
+    setText("Input Value")
+  }
+
 	return (
 		<View style={styles.view}>
-			<Text style={styles.header}>{text}</Text>
-      <TextInput onChange={() => setText("Changed")} style={styles.input}></TextInput>
-      <Button title="Change Text" onPress={() => setText("Bruh")} />
+			<View style={styles.textContainer}>
+				<Text style={styles.header}>{text}</Text>
+			</View>
+			<TextInput style={styles.input} defaultValue="Input Value"  onChangeText={(val) => setText(val)} />
+			<Button title='Reset Text' onPress={() => setText("Input Value")} />
 			<StatusBar style='auto'></StatusBar>
 		</View>
 	);
@@ -27,21 +33,22 @@ const styles = StyleSheet.create({
 		gap: 10,
 	},
 	header: {
-		borderRadius: 20,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		backgroundColor: "cornflowerblue",
 		color: "#fff",
 		fontSize: 50,
 		fontWeight: "bold",
 	},
 	input: {
-    width: 250,
-    height: 30,
-    padding: 20,
-    borderColor: 'white',
-    borderRadius: 10,
-    color: 'black',
-    backgroundColor: 'white'
-  },
+		width: 250,
+		height: 30,
+		padding: 20,
+		borderColor: "white",
+		borderRadius: 10,
+		color: "black",
+		backgroundColor: "white",
+	},
+	textContainer: {
+		borderRadius: 20,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+	},
 });
