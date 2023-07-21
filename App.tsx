@@ -1,28 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, FlatList, TextInput } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	FlatList,
+	TextInput,
+	TouchableHighlight,
+} from "react-native";
 import { useState } from "react";
 
 export default function App() {
-	const [list, setList] = useState<{ key: string; value: string }[]>([
-		{
-			value: "test item 1",
-			key: "test key",
-		},
-	]);
+	const [list, setList] = useState<{ key: string; value: string }[]>([]);
 
 	function handleTextSubmit(val: string) {
 		setList([
 			...list,
-			{ value: val, key: `${val}-${Math.round(Math.random() * 100)}` },
+			{ value: val, key: `${val}-${Math.round(Math.random() * 1000000)}` },
 		]);
 	}
 
 	function handleListItemDeletion(deletionKey: string) {
-		const res = new Array<{ key: string; value: string }>();
-		list.forEach((item) => {
-			if (item.key != deletionKey) res.push(item);
+		setList((prevList) => {
+			return prevList.filter(({ key }) => key != deletionKey);
 		});
-		setList([...res]);
 	}
 
 	return (
@@ -38,12 +38,13 @@ export default function App() {
 				style={styles.flatList}
 				data={list}
 				renderItem={({ item }) => (
-					<View
-						onTouchStart={() => handleListItemDeletion(item.key)}
+					<TouchableHighlight
+						underlayColor='crimson'
+						onPress={() => handleListItemDeletion(item.key)}
 						style={styles.listItemContainer}
 					>
 						<Text style={styles.listItem}>{item.value}</Text>
-					</View>
+					</TouchableHighlight>
 				)}
 			/>
 			<StatusBar style='auto'></StatusBar>
